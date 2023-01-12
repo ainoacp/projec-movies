@@ -79,7 +79,6 @@ const putMovie = async (req, res) => {
         const {id} = req.params;
         const putMovie = new Movie(req.body);
         putMovie._id = id;
-        
         const updatedMovie = await Movie.findByIdAndUpdate(id, putMovie, {new: true});
         return res.status(200).json(updatedMovie);
     } catch (error) {
@@ -91,9 +90,9 @@ const deleteMovie = async(req, res) => {
     try {
         const {id} = req.params;
         const deletedMovie = await Movie.findByIdAndDelete(id);
-        return res.status(200).json(deletedMovie);
+        return res.status(200).json('Movie successfully deleted');
     } catch (error) {
-        
+        return res.status(500).json(error);
     }
 };
 
