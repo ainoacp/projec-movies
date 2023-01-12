@@ -17,5 +17,6 @@ app.use(express.urlencoded({extended: true}));
 
 app.use('/movies', moviesRoutes);
 app.use('/cinema', cinemaRoutes);
+app.use('*', (req,res,next) => {return res.status(404).json("Route not found")}); // esto hace que si todas las rutas anteriores no funcionan te conteste con este error específico
 
 app.listen(PORT, () => console.log('listening on port ', PORT));
