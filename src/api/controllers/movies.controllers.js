@@ -26,7 +26,7 @@ const  getMovieById = async (req, res) => {
 const getMovieByTitle = async (req, res) => {
     try {
         const {title} = req.params;
-        const myMovieByTitle = await Movie.find( {title:title} );
+        const myMovieByTitle = await Movie.find({ "title" : { $regex :  RegExp(`^${title}$`, 'i') } } );
         if (myMovieByTitle) {
             return res.status(200).json(myMovieByTitle);
         } else {
@@ -65,5 +65,46 @@ const getMovieByYear = async (req, res) => {
     }
 };
 
+const postMovie = async (req, res) => {
+    try {
+        const newMovie = new Movie(req.body);
+        const createdMovie = await newMovie.save();
+        return res.status(201).json(createdMovie);
+    } catch (error) {
+        return res.status(500).json(error);
+    }
+};
+const putMovie = async (req, res) => {
+    try {
+        const {id} = req.params;
+        const putMovie = new Movie(req.body);
+        putMovie._id = id;
+        
+        const updatedMovie = await Movie.findByIdAndUpdate(id, putMovie, {new: true});
+        return res.status(200).json(updatedMovie);
+    } catch (error) {
+        return res.status(500).json(error);
+    }
+};
 
-module.exports = {getAllMovies, getMovieById, getMovieByTitle, getMovieByGender, getMovieByYear};
+const deleteMovie = async(req, res) => {
+    try {
+        const {id} = req.params;
+        const deletedMovie = await Movie.findByIdAndDelete(id);
+        return res.status(200).json(deletedMovie);
+    } catch (error) {
+        
+    }
+};
+
+
+module.exports = {
+    getAllMovies, 
+    getMovieById, 
+    getMovieByTitle, 
+    getMovieByGender, 
+    getMovieByYear,
+    postMovie, 
+    putMovie,
+    deleteMovie
+};
